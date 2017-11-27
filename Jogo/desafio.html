@@ -1,0 +1,155 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
+  <script> 
+var carro, buraco, top;
+function preload() {
+	carro = loadImage("spr.png");
+	buraco = loadImage("buraco.png");
+}
+function setup() {
+	createCanvas(1200,720);
+	background(0); 
+	frameRate(30);
+}
+var carX, carY, enemyX, enemyY, x = -20, fx = 1;
+var posCar = 0;
+var score = 0;
+var ram = Math.floor(Math.random() * 3); 
+var fases = [0,1,2,3,4,5];
+var speed = -20;
+var carX = 10;
+var carY = [50, 250, 450];
+var enemyX = 1200;
+var enemyY = [50, 250, 450];
+function keyTyped() {
+	if(key === "w" && carY[posCar] -200 > 0) {
+		posCar--;
+	}
+	if(key === "s" && carY[posCar] +200 < 600) {
+		posCar++;
+	}
+	if(key === "r" && fases[fx] == 0) {
+		fx = 1;
+		speed = 20;
+		enemy();
+		score = 0;
+	}
+	if(key === "c") {
+		if (fases[fx] == 1) {
+			fx = 2;
+			speed = 20;
+			enemy();
+		} else if (fases[fx] == 3) {
+			fx = 4;
+			speed = 20;
+			enemy();
+		}
+	}
+}
+function enemy() {
+	enemyX = 1200;
+	ram = Math.floor(Math.random() * 3);
+	speed += 1.5;
+}
+function draw() {
+	if (fases[fx] == 2) {
+		createCanvas(1200,720);
+		background(56);
+		fill(255,255,255);
+		rect(-1 ,260, 1201, 25);
+		rect(x ,300, 50, 25);
+		rect(x + 200 ,300,75, 25);
+		rect(x + 400,300, 75, 25);
+		rect(x + 600,300, 75, 25);
+		rect(x + 800,300, 75, 25);
+		rect(x + 1000,300, 75, 25);
+		rect(x + 1200,300, 75, 25);
+		textSize(19);
+		text("Pontos: " + score, 50, 50);
+		text("Objetivo: 3000 pontos", 300, 50);
+		text("Velocidade: " + (2 * speed) + " km/h", 650, 50);
+		image(carro, carX, carY[posCar]);
+		image(buraco, enemyX ,enemyY[ram] - 100, width/6, height/2);
+		if (x >= -200) {
+			x -= speed;
+		} else {
+			x = -20;
+		}
+		if (enemyX > -200) {
+			enemyX -= speed;
+		} else {
+			score += 100;
+			enemy();
+		}
+		if (enemyX <= carX && enemyY[ram] == carY[posCar]) {
+			fx = 0;
+		}
+		if (score == 3000) {
+			fx = 3;
+		}
+	} else if (fases[fx] == 4) {
+		createCanvas(1200,720);
+		background(56);
+		fill(255,255,255);
+		rect(-1 ,260, 1201, 25);
+		rect(x ,300, 50, 25);
+		rect(x + 200 ,300,75, 25);
+		rect(x + 400,300, 75, 25);
+		rect(x + 600,300, 75, 25);
+		rect(x + 800,300, 75, 25);
+		rect(x + 1000,300, 75, 25);
+		rect(x + 1200,300, 75, 25);
+		textSize(19);
+		text("Pontos: " + score, 50, 50);
+		text("Objetivo: 6000 pontos", 300, 50);
+		text("Velocidade: " + (2 * speed) + " km/h", 650, 50);
+		image(carro, enemyX, enemyY[ram]);
+		image(buraco, carX,carY[posCar] - 100, width/6, height/2);
+		if (x >= -200) {
+			x -= speed;
+		} else {
+			x = -20;
+		}
+		if (enemyX > -200) {
+			enemyX -= speed;
+		} else {
+			fx = 0;
+		}
+		if (enemyX <= carX && enemyY[ram] == carY[posCar]) {
+			score += 100;
+			enemy();
+		}
+	} else {
+			createCanvas(1200,720);
+			background(0);
+			textSize(20);
+			if (fases[fx] == 1) {
+				text("1º fase: Natal. Aperte C para iniciar", 450, 300);
+				text("Desvie de todos os buracos.", 450, 500);
+				text("Use W para subir na pista, e S para descer.", 450, 600);
+			} else if (fases[fx] == 3) {
+				text("2º fase: Russia. Aperte C para iniciar", 450, 300);
+				text("Pegue todos os carros.", 450, 500);
+			} else if (fases[fx] == 0) {
+				createCanvas(1200,720);
+				background(0);
+				textSize(20);
+				text("Você perdeu. Pressione R para continuar.", 450, 300);
+				text("Score: " + score, 450, 350);
+			}
+			fill(255,255,255);	
+	}
+}
+  
+ </script>
+
+  <style> body {padding: 0; margin: 0;} </style>
+</head>
+
+<body>
+</body>
+</html>
